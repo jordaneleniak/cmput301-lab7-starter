@@ -71,4 +71,49 @@ public class MainActivityTest {
         onData(is(instanceOf(String.class))).inAdapterView(withId(R.id.city_list)).atPosition(0).check(matches((withText("Edmonton"))));
         //onData(anything()).inAdapterView(withId(R.id.city_list)).atPosition(0).check(matches((withText("Edmonton"))));
     }
+
+    @Test
+    public void testShowActivitySwitch() {
+        // Add a city
+        onView(withId(R.id.button_add)).perform(click());
+        onView(withId(R.id.editText_name)).perform(ViewActions.typeText("Edmonton"));
+        onView(withId(R.id.button_confirm)).perform(click());
+
+        // Click on the city in the list
+        onData(is(instanceOf(String.class))).inAdapterView(withId(R.id.city_list)).atPosition(0).perform(click());
+
+        // Check if ShowActivity is displayed by checking if textView_cityName is visible
+        onView(withId(R.id.textView_cityName)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testCityNameConsistency() {
+        // Add a city
+        onView(withId(R.id.button_add)).perform(click());
+        onView(withId(R.id.editText_name)).perform(ViewActions.typeText("Edmonton"));
+        onView(withId(R.id.button_confirm)).perform(click());
+
+        // Click on the city in the list
+        onData(is(instanceOf(String.class))).inAdapterView(withId(R.id.city_list)).atPosition(0).perform(click());
+
+        // Check if the city name is consistent
+        onView(withId(R.id.textView_cityName)).check(matches(withText("Edmonton")));
+    }
+
+    @Test
+    public void testBackButton() {
+        // Add a city
+        onView(withId(R.id.button_add)).perform(click());
+        onView(withId(R.id.editText_name)).perform(ViewActions.typeText("Edmonton"));
+        onView(withId(R.id.button_confirm)).perform(click());
+
+        // Click on the city in the list
+        onData(is(instanceOf(String.class))).inAdapterView(withId(R.id.city_list)).atPosition(0).perform(click());
+
+        // Click back button
+        onView(withId(R.id.button_back)).perform(click());
+
+        // Check if we are back in MainActivity (city_list should be displayed)
+        onView(withId(R.id.city_list)).check(matches(isDisplayed()));
+    }
 }
